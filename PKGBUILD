@@ -63,6 +63,17 @@ sha512sums=(
   '55f6ee13342b3209b1fcb310f4c4d33d22856ee785cb2347e6ad36c34e9b42f6e0d5bece8e458b09663a5b78e34c4567fe7a211b51ca71f55ccc93e3f62dc5e4'
 )
 
+_bin="$( \
+  dirname \
+    "$(command \
+      -v \
+      "cc")")"
+_usr="$( \
+  dirname \
+    "${_bin}")"
+_include="${_usr}/include"
+_lib="${_usr}/lib"
+
 build() {
   cd \
     "${_pkg}-${pkgver}"
@@ -71,8 +82,8 @@ build() {
   # Otherwise we end up building against the OpenSSL 3 headers
   # even though this version of cryptography
   # doesn't support OpenSSL 3, yet.
-  CFLAGS+=" -I/usr/include/openssl-1.1"
-  LDFLAGS+=" -L/usr/lib/openssl-1.1"
+  CFLAGS+=" -I${_include}/openssl-1.1"
+  LDFLAGS+=" -L${_lib}/openssl-1.1"
   "${_py}" \
     setup.py \
       build
